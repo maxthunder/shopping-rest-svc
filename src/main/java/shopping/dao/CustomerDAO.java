@@ -12,14 +12,20 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-@Transactional()
+@Transactional
 public class CustomerDAO implements ICustomerDAO {
 
+	private final String GET_CUSTOMER_QUERY
+			= "SELECT customer_id, customer_name FROM shopping.customer\n";
+
+	private final IBaseDAO baseDAO;
+
 	@Autowired
-	private IBaseDAO baseDAO;
+	public CustomerDAO(IBaseDAO baseDAO) {
+		this.baseDAO = baseDAO;
+	}
 
-	private final String GET_CUSTOMER_QUERY = "SELECT customer_id, customer_name FROM shopping.customer\n";
-
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Customer> getAllCustomers() {
 		List<Customer> customers = new ArrayList<>();
@@ -30,6 +36,7 @@ public class CustomerDAO implements ICustomerDAO {
 		return customers;
 	}
 
+	@Override
 	public Customer getCustomerById(Integer customerId) {
 		String query = GET_CUSTOMER_QUERY + "WHERE customer_id = :customerId\n";
 
@@ -41,6 +48,7 @@ public class CustomerDAO implements ICustomerDAO {
 		return buildCustomer(results);
 	}
 
+	@Override
 	public Customer getCustomerByName(String customerName) {
 		String query = GET_CUSTOMER_QUERY + "WHERE customer_name = :customerName\n";
 
@@ -55,6 +63,7 @@ public class CustomerDAO implements ICustomerDAO {
 		return buildCustomer(results);
 	}
 
+	@Override
 	public Customer getCustomerByIdAndName(Customer customer) {
 		String query = GET_CUSTOMER_QUERY + "WHERE customer_id = :customerId AND customer_name = :customerName\n";
 
@@ -67,6 +76,7 @@ public class CustomerDAO implements ICustomerDAO {
 		return buildCustomer(results);
 	}
 
+	@Override
 	public Customer saveOrUpdateCustomer(Customer customerToPersist) {
 		Customer customer = new Customer();
 
@@ -81,19 +91,7 @@ public class CustomerDAO implements ICustomerDAO {
 		return customer;
 	}
 
-//	public Customer saveCustomer(String customerName) {// REVIEW: broken-> impl above
-//		String queryString = "INSERT INTO shopping.customer (customer_name) VALUES (:customerName)";
-//		Map<String, Object> queryParameters = new HashMap<>();
-//		queryParameters.put("customerName", customerName);
-//		Object[] objArray = baseDAO.getObjectArrayFromNativeQuery(queryString, queryParameters);
-//
-//		// Build pojo
-//		Customer customer = new Customer();
-//		customer.setCustomerId((Integer) objArray[0]);
-//		customer.setCustomerName((String) objArray[1]);
-//		return customer;
-//	}
-
+	@Override
 	public Customer delete(Customer customer) {
 		baseDAO.getCurrentSession().delete(customer);
 		return customer;
@@ -108,7 +106,7 @@ public class CustomerDAO implements ICustomerDAO {
 			Integer customerId = (objects[0] == null) ? null : (Integer) objects[0];
 			String customerName = (objects[1] == null) ? null : (String) objects[1];
 			if (customerId != null && customerName != null) {
-				customer = new Customer((Integer) objects[0], (String) objects[1]);
+				customer = new Customer(customerId, customerName);
 			}
 		}
 		return customer;

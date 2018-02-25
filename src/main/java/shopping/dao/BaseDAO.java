@@ -4,6 +4,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,16 @@ public class BaseDAO extends AbstractBaseDAO implements IBaseDAO {
 	@Override
 	public Session getCurrentSession() {
 		return super.getCurrentSession();
+	}
+
+	@Override
+	public Serializable save(Object obj) {
+		return getCurrentSession().save(obj);
+	}
+
+	@Override
+	public void saveOrUpdate(Object obj) {
+		getCurrentSession().saveOrUpdate(obj);
 	}
 
 	@Override

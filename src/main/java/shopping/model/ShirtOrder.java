@@ -20,39 +20,32 @@ public class ShirtOrder {
 	private Integer shirtOrderId;
 
 	@JsonProperty(required = true)
-	@ApiModelProperty(notes = "The name of the shirt", required = true)
-	@Column(name = "shirt_name")
-	private String shirtName;
-
-	@JsonProperty(required = true)
-	@ApiModelProperty(notes = "The size of the shirt (S,M,L,...)", required = true)
-	@Column(name = "size")
-	private String size;
-
-	@JsonProperty(required = true)
-	@ApiModelProperty(notes = "The shirtOrderId of the customer", required = true)
+	@ApiModelProperty(notes = "The id of the customer", required = true)
 	@Column(name = "customer_id")
 	private Integer customerId;
+
+	@JsonProperty(required = true)
+	@ApiModelProperty(notes = "The id of the shirt ref", required = true)
+	@Column(name = "shirt_ref_id")
+	private Integer shirtRefId;
+
+	public ShirtOrder() {}
+
+	public ShirtOrder(Integer customerId, Integer shirtRefId) {
+		this(null, customerId, shirtRefId);
+	}
+
+	public ShirtOrder(Integer shirtOrderId, Integer customerId, Integer shirtRefId) {
+		this.shirtOrderId = shirtOrderId;
+		this.customerId = customerId;
+		this.shirtRefId = shirtRefId;
+	}
 
 	public Integer getShirtOrderId() {
 		return this.shirtOrderId;
 	}
 	public void setShirtOrderId(Integer shirtOrderId) {
 		this.shirtOrderId = shirtOrderId;
-	}
-
-	public String getShirtName() {
-		return this.shirtName;
-	}
-	public void setShirtName(String shirtName) {
-		this.shirtName = shirtName;
-	}
-
-	public String getSize() {
-		return this.size;
-	}
-	public void setSize(String size) {
-		this.size = size;
 	}
 
 	public Integer getCustomerId() {
@@ -62,13 +55,19 @@ public class ShirtOrder {
 		this.customerId = customerId;
 	}
 
+	public Integer getShirtRefId() {
+		return shirtRefId;
+	}
+	public void setShirtRefId(Integer shirtRefId) {
+		this.shirtRefId = shirtRefId;
+	}
+
 	@Override
 	public String toString() {
 		return "ShirtOrder{" +
 				"shirtOrderId=" + shirtOrderId +
-				", shirtName='" + shirtName + '\'' +
-				", size='" + size + '\'' +
 				", customerId=" + customerId +
+				", shirtRefId=" + shirtRefId +
 				'}';
 	}
 }

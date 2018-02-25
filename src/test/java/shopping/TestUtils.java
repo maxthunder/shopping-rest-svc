@@ -10,8 +10,8 @@ public class TestUtils {
 	public static ShirtOrder getShirtOrder(int id) {
 		ShirtOrder shirtOrder = new ShirtOrder();
 		shirtOrder.setShirtOrderId(id);
-		shirtOrder.setShirtName("shirtName" + id);
-		shirtOrder.setSize("size" + id);
+//		shirtOrder.setShirtName("shirtName" + id);
+//		shirtOrder.setSize("size" + id);
 		shirtOrder.setCustomerId(id + 1);
 		return shirtOrder;
 	}

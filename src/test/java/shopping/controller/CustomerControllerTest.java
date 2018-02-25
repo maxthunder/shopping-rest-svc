@@ -43,8 +43,17 @@ public class CustomerControllerTest {
 
 	@Test
 	public void testGetCustomers() throws Exception {
-		Mockito.when(this.customerService.getAllCustomers()).thenReturn(Arrays.asList(TestUtils.getCustomer(1), TestUtils.getCustomer(2), TestUtils.getCustomer(3)));
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/customers", new Object[0]).accept(new MediaType[]{MediaType.APPLICATION_JSON})).andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
+		Mockito.when(this.customerService.getAllCustomers())
+				.thenReturn(Arrays.asList(TestUtils.getCustomer(1), TestUtils.getCustomer(2), TestUtils.getCustomer(3)));
+		
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/customers", new Object[0])
+				.accept(new MediaType[]{MediaType.APPLICATION_JSON}))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content()
+						.contentType("application/json;charset=UTF-8"));
 		Mockito.verify(this.customerService).getAllCustomers();
 	}
+
+	// REVIEW: add the rest of the Customer CRUD tests
 }

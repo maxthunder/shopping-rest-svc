@@ -5,7 +5,9 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,54 +15,73 @@ import org.springframework.web.bind.annotation.RestController;
 import shopping.model.ShirtOrder;
 import shopping.service.ShirtOrderService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping({"${spring.data.rest.base-path}/shirtOrders"})
 public class ShirtOrderController extends ControllerBase {
 
+	private final ShirtOrderService shirtOrderService;
+
 	@Autowired
-	private ShirtOrderService shirtOrderService;
-
-	@ApiOperation(value = "", notes = "Get all shirt orders.")
-	@RequestMapping(method = RequestMethod.GET, value = "", produces = "application/json")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = ShirtOrder.class),
-			@ApiResponse(code = 400, message = "Bad Request"),
-			@ApiResponse(code = 401, message = "Unauthorized"),
-			@ApiResponse(code = 403, message = "Forbidden"),
-			@ApiResponse(code = 404, message = "Not Found"),
-			@ApiResponse(code = 500, message = "Failure")
-	}) public Iterable<ShirtOrder> getShirtOrders() {
-		return this.shirtOrderService.getAllShirtOrders();
+	public ShirtOrderController(ShirtOrderService shirtOrderService) {
+		this.shirtOrderService = shirtOrderService;
 	}
 
-	@ApiOperation(value = "/{id}", notes = "Get all shirt orders.")
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = "application/json")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = ShirtOrder.class),
-			@ApiResponse(code = 400, message = "Bad Request"),
-			@ApiResponse(code = 401, message = "Unauthorized"),
-			@ApiResponse(code = 403, message = "Forbidden"),
-			@ApiResponse(code = 404, message = "Not Found"),
-			@ApiResponse(code = 500, message = "Failure")
-	}) public ShirtOrder getShirtOrder(
-			@ApiParam(name = "id",value = "id of shirt order",required = true) @PathVariable("id") Integer id) {
-		return this.shirtOrderService.getShirtOrder(id);
-	}
+	/**
+	 * GET all Shirt Orders
+	 */
 
-	@ApiOperation(value = "", notes = "Create new shirt order.")
-	@RequestMapping(method = RequestMethod.POST, value = "", produces = "application/json")
+	@GetMapping(value = "")
+	@ApiOperation(value = "", notes = "Gets all shirt orders.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = ShirtOrder.class),
 			@ApiResponse(code = 400, message = "Bad Request"),
-			@ApiResponse(code = 401, message = "Unauthorized"),
-			@ApiResponse(code = 403, message = "Forbidden"),
 			@ApiResponse(code = 404, message = "Not Found"),
-			@ApiResponse(code = 500, message = "Failure")
+			@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public ShirtOrder createShirtOrder(
-			@ApiParam(name = "shirtName",value = "Name of shirt",required = true) @RequestParam("shirtName") String shirtName,
-			@ApiParam(name = "size",value = "Size of shirt",required = true) @RequestParam("size") String size,
-			@ApiParam(name = "customerId",value = "ID of customer",required = true) @RequestParam("customerId") Integer customerId) {
-		return this.shirtOrderService.createShirtOrder(shirtName, size, customerId);
+
+	public List<ShirtOrder> getShirtOrders() {
+		return shirtOrderService.getAllShirtOrders();
 	}
+
+
+
+	/**
+	 * GET Shirt order by ID
+	 */
+
+	@GetMapping(value = "/{id}")
+	@ApiOperation(value = "/{id}", notes = "Gets shirt order by ID.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = ShirtOrder.class),
+			@ApiResponse(code = 400, message = "Bad Request"),
+			@ApiResponse(code = 404, message = "Not Found"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+	})
+	public ShirtOrder getShirtOrder(
+			@ApiParam(name = "id",value = "ID of shirt order",required = true) @PathVariable("id") Integer id) {
+
+		return shirtOrderService.getShirtOrder(id);
+	}
+
+	/**
+	 * POST Shirt order
+	 */
+
+	@PostMapping(value = "")
+	@ApiOperation(value = "", notes = "Creates new shirt order.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = ShirtOrder.class),
+			@ApiResponse(code = 400, message = "Bad Request"),
+			@ApiResponse(code = 404, message = "Not Found"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+	})
+	public ShirtOrder createShirtOrder(// TODO  replace String -> ShirtOrder
+			@ApiParam(name = "customerId",value = "ID of customer",required = true) @RequestParam("customerId") Integer customerId,
+			@ApiParam(name = "shirtRefId",value = "ID of shirt ref",required = true) @RequestParam("shirtRefId") Integer shirtRefId) {
+
+		return shirtOrderService.saveShirtOrder(customerId, shirtRefId);
+	}
+
 }

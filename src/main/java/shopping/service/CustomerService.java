@@ -36,6 +36,11 @@ public class CustomerService {
 	}
 
 	public Customer updateCustomer(Integer customerId, String customerName) {
+		if (customerDAO.getCustomerByName(customerName) != null) {
+			throw new BadRequestException("Customer at name <"+customerName+"> already exists in database.");
+		}
+
+		// Attempt to load by customer ID, null indicates a new entry needed.
 		Customer loadedCustomer = customerDAO.getCustomerById(customerId);
 
 		Customer customer = null;

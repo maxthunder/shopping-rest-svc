@@ -1,0 +1,21 @@
+-- Create the new database
+mysql> create database shopping;
+-- Creates the user
+mysql> create user 'shopping_user'@'localhost' identified by 'shopping_user123';
+-- Gives all the privileges to the new user on the newly created database
+mysql> grant all on shopping.* to 'shopping_user'@'localhost';
+
+
+-- Revokes privileges
+mysql> revoke all on shopping.* from 'shopping_user'@'localhost';
+-- Grants CRUD privileges
+mysql> grant select, insert, delete, update on shopping.* to 'shopping_user'@'localhost';
+
+-- start mySQL server
+maxwell> mysql.server start
+
+-- stop mySQL server
+maxwell> mysql.server stop
+
+-- connect to server as root user
+mysql> mysql -u root

@@ -1,0 +1,6 @@
+TODO - setup session factory
+TODO - impl CRUD shirt order endpts
+TODO - impl CRUD customer endpts
+TODO - impl ShirtOrderService tests
+TODO - impl CustomerService tests
+TODO - add logging

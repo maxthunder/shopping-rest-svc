@@ -91,12 +91,6 @@ public class CustomerDAO implements ICustomerDAO {
 		return customer;
 	}
 
-	@Override
-	public Customer delete(Customer customer) {
-		baseDAO.getCurrentSession().delete(customer);
-		return customer;
-	}
-
 	// objects[]: customerId, customerName
 	private Customer buildCustomer(Object[] objects) {
 		Customer customer = null;

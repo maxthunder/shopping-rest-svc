@@ -11,6 +11,7 @@ public interface IBaseDAO {
 	Session getCurrentSession();
 	Serializable save(Object obj);
 	void saveOrUpdate(Object obj);
+	void delete(Object obj);
 	Object[] getObjectArrayFromNativeQuery(String queryString);
 	Object[] getObjectArrayFromNativeQuery(String queryString, Map<String, Object> queryParameters);
 	List getListFromNativeQuery(String queryString);

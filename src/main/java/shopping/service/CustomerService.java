@@ -3,6 +3,7 @@ package shopping.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import shopping.dao.IBaseDAO;
 import shopping.util.ResourceNotFoundException;
 import shopping.util.BadRequestException;
 import shopping.dao.ICustomerDAO;
@@ -13,10 +14,12 @@ import java.util.List;
 @Service
 public class CustomerService {
 
+	private final IBaseDAO baseDAO;
 	private final ICustomerDAO customerDAO;
 
 	@Autowired
-	public CustomerService(ICustomerDAO customerDAO) {
+	public CustomerService(IBaseDAO baseDAO, ICustomerDAO customerDAO) {
+		this.baseDAO = baseDAO;
 		this.customerDAO = customerDAO;
 	}
 
@@ -68,6 +71,7 @@ public class CustomerService {
 		if (customer == null) {
 			throw new ResourceNotFoundException("Customer at <ID, Name> :", customerId+", "+customerName);
 		}
-		return customerDAO.delete(customer);
+		baseDAO.delete(customer);
+		return customer;
 	}
 }

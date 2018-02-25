@@ -27,6 +27,11 @@ public class BaseDAO extends AbstractBaseDAO implements IBaseDAO {
 	}
 
 	@Override
+	public void delete(Object obj) {
+		getCurrentSession().delete(obj);
+	}
+
+	@Override
 	public Object[] getObjectArrayFromNativeQuery(String queryString) {
 		return getObjectArrayFromNativeQuery(queryString, null);
 	}

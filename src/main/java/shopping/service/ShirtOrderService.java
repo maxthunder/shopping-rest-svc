@@ -2,6 +2,7 @@ package shopping.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import shopping.dao.IBaseDAO;
 import shopping.dao.ICustomerDAO;
 import shopping.dao.IShirtOrderDAO;
 import shopping.util.BadRequestException;
@@ -13,11 +14,13 @@ import java.util.List;
 @Service
 public class ShirtOrderService {
 
+	private final IBaseDAO baseDAO;
 	private final ICustomerDAO customerDAO;
 	private final IShirtOrderDAO shirtOrderDAO;
 
 	@Autowired
-	public ShirtOrderService(IShirtOrderDAO shirtOrderDAO, ICustomerDAO customerDAO) {
+	public ShirtOrderService(IBaseDAO baseDAO, IShirtOrderDAO shirtOrderDAO, ICustomerDAO customerDAO) {
+		this.baseDAO = baseDAO;
 		this.shirtOrderDAO = shirtOrderDAO;
 		this.customerDAO = customerDAO;
 	}
@@ -42,7 +45,7 @@ public class ShirtOrderService {
 		return shirtOrderDAO.saveOrUpdateShirtOrder(new ShirtOrder(customerId, shirtRefId));
 	}
 
-//	public ShirtOrder updateShirtOrder(Integer shirtOrderId, String shirtOrderName) {
+//	public ShirtOrder updateShirtOrder(Integer shirtOrderId, Integer customerId, Integer shirtRefId) {
 //		// Attempt to load by shirtOrder ID, null indicates a new entry needed.
 //		ShirtOrder loadedShirtOrder = shirtOrderDAO.getShirtOrderById(shirtOrderId);
 //
@@ -63,14 +66,14 @@ public class ShirtOrderService {
 //		// saveOrUpdate if any fields have changed (shirtOrder was built)
 //		return shirtOrder != null ? shirtOrderDAO.saveOrUpdateShirtOrder(shirtOrder) : loadedShirtOrder;
 //	}
-//
-//	// Both shirtOrder ID and name are used to validate shirtOrder before deletion to avoid 'fat-fingering' mishaps.
-//	// REVIEW: Add shirtOrderStatus==DELETABLE to add further protection from accidental shirtOrder deletions
-//	public ShirtOrder deleteShirtOrder(Integer shirtOrderId, String shirtOrderName) {
-//		ShirtOrder shirtOrder = shirtOrderDAO.getShirtOrderByIdAndName(new ShirtOrder(shirtOrderId, shirtOrderName));
-//		if (shirtOrder == null) {
-//			throw new ResourceNotFoundException("ShirtOrder at <ID, Name> :", shirtOrderId+", "+shirtOrderName);
-//		}
-//		return shirtOrderDAO.delete(shirtOrder);
-//	}
+
+	// REVIEW: Add shirtOrderStatus==DELETABLE to add further protection from accidental shirtOrder deletions
+	public ShirtOrder deleteShirtOrder(Integer shirtOrderId) {
+		ShirtOrder shirtOrder = shirtOrderDAO.getShirtOrderById(shirtOrderId);
+		if (shirtOrder == null) {
+			throw new ResourceNotFoundException("Shirt order at ID", shirtOrderId);
+		}
+		baseDAO.delete(shirtOrder);
+		return shirtOrder;
+	}
 }

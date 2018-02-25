@@ -11,6 +11,5 @@ public interface ICustomerDAO {
 	Customer getCustomerByName(String customerName);
 	Customer getCustomerByIdAndName(Customer customer);
 	Customer saveOrUpdateCustomer(Customer customer);
-	Customer delete(Customer customer);
 
 }

@@ -107,7 +107,7 @@ public class CustomerController extends ControllerBase {
 	 */
 
 	@DeleteMapping(value = "/{id}/{name}")
-	@ApiOperation(value = "/{id}/{name}", notes = "Delete customer by ID and name (to protect against accidental deletions).")
+	@ApiOperation(value = "/{id}/{name}", notes = "Deletes customer by ID and name (to protect against accidental deletions).")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = Customer.class),
 			@ApiResponse(code = 400, message = "Bad Request"),

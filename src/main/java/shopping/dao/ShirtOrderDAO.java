@@ -2,7 +2,11 @@ package shopping.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import shopping.model.Customer;
+import shopping.model.CustomerInfo;
 import shopping.model.ShirtOrder;
+import shopping.model.ShirtOrderInfo;
+import shopping.model.ShirtRefInfo;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -14,8 +18,11 @@ import java.util.Map;
 @Transactional
 public class ShirtOrderDAO implements IShirtOrderDAO {
 
-	private final String GET_SHIRT_ORDER_QUERY 
-			= "SELECT shirt_order_id, customer_id, shirt_ref_id FROM shopping.shirt_order\n";
+	private final String GET_SHIRT_ORDER_QUERY =
+					"SELECT shirt_order_id, so.customer_id, customer_name, so.shirt_ref_id, shirt_ref_name, size, style\n" +
+					"FROM shopping.shirt_order so\n" +
+					"JOIN shopping.customer USING(customer_id)\n" +
+					"JOIN shopping.shirt_ref USING(shirt_ref_id)\n";
 
 	private final IBaseDAO baseDAO;
 
@@ -26,11 +33,27 @@ public class ShirtOrderDAO implements IShirtOrderDAO {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<ShirtOrder> getAllShirtOrders() {
-		List<ShirtOrder> shirtOrders = new ArrayList<>();
+	public List<ShirtOrderInfo> getAllShirtOrders() {
+		List<ShirtOrderInfo> shirtOrders = new ArrayList<>();
 		for (Object[] objects : (List<Object[]>) baseDAO.getListFromNativeQuery(GET_SHIRT_ORDER_QUERY)) {
-			// shirt_order_id, customer_id, shirt_ref_id
-			shirtOrders.add(new ShirtOrder((Integer) objects[0], (Integer) objects[1], (Integer) objects[2]));
+			Integer shirtOrderId = (Integer) objects[0];
+			Integer customerId = (Integer) objects[1];
+			String customerName = (String) objects[2];
+			Integer shirtRefId = (Integer) objects[3];
+			String shirtRefName = (String) objects[4];
+			String size = null;
+			String style = null;
+			if (objects[5] != null) {
+				size = (String) objects[5];
+			}
+			if (objects[6] != null) {
+				style = (String) objects[6];
+			}
+			shirtOrders.add(
+					new ShirtOrderInfo(shirtOrderId,
+							new CustomerInfo(customerId, customerName),
+							new ShirtRefInfo(shirtRefId, shirtRefName, size, style))
+			);
 		}
 		return shirtOrders;
 	}

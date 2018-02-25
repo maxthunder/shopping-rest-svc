@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import shopping.dao.IBaseDAO;
 import shopping.dao.ICustomerDAO;
 import shopping.dao.IShirtOrderDAO;
+import shopping.model.ShirtOrderInfo;
 import shopping.util.BadRequestException;
 import shopping.model.ShirtOrder;
 import shopping.util.ResourceNotFoundException;
@@ -25,7 +26,7 @@ public class ShirtOrderService {
 		this.customerDAO = customerDAO;
 	}
 
-	public List<ShirtOrder> getAllShirtOrders() {
+	public List<ShirtOrderInfo> getAllShirtOrders() {
 		return shirtOrderDAO.getAllShirtOrders();
 	}
 

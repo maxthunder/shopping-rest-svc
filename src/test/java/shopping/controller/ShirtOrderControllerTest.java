@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import shopping.TestUtils;
+import shopping.model.ShirtOrderInfo;
 import shopping.service.ShirtOrderService;
 
 @RunWith(SpringRunner.class)
@@ -43,8 +44,14 @@ public class ShirtOrderControllerTest {
 
 	@Test
 	public void testGetShirtOrders() throws Exception {
-		Mockito.when(this.shirtOrderService.getAllShirtOrders()).thenReturn(Arrays.asList(TestUtils.getShirtOrder(1), TestUtils.getShirtOrder(2), TestUtils.getShirtOrder(3)));
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/shirtOrders", new Object[0]).accept(new MediaType[]{MediaType.APPLICATION_JSON})).andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"));
-		((ShirtOrderService)Mockito.verify(this.shirtOrderService)).getAllShirtOrders();
+		Mockito.when(this.shirtOrderService.getAllShirtOrders())
+				.thenReturn(Arrays.asList(new ShirtOrderInfo(), new ShirtOrderInfo(), new ShirtOrderInfo()));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/shirtOrders", new Object[0])
+				.accept(new MediaType[]{MediaType.APPLICATION_JSON}))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content()
+						.contentType("application/json;charset=UTF-8"));
+		Mockito.verify(this.shirtOrderService).getAllShirtOrders();
 	}
 }

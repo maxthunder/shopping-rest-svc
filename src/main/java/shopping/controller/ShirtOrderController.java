@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shopping.model.ShirtOrder;
+import shopping.model.ShirtOrderInfo;
 import shopping.service.ShirtOrderService;
 
 import java.util.List;
@@ -43,7 +42,7 @@ public class ShirtOrderController extends ControllerBase {
 			@ApiResponse(code = 500, message = "Internal Server Error")
 	})
 
-	public List<ShirtOrder> getShirtOrders() {
+	public List<ShirtOrderInfo> getShirtOrders() {
 		return shirtOrderService.getAllShirtOrders();
 	}
 
@@ -110,8 +109,8 @@ public class ShirtOrderController extends ControllerBase {
 	 * DELETE ShirtOrder
 	 */
 
-	@DeleteMapping(value = "/{id}/{name}")
-	@ApiOperation(value = "/{id}/{name}", notes = "Delete shirt order by ID and name (to protect against accidental deletions).")
+	@DeleteMapping(value = "/{id}")
+	@ApiOperation(value = "/{id}", notes = "Deletes shirt order by ID.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = ShirtOrder.class),
 			@ApiResponse(code = 400, message = "Bad Request"),

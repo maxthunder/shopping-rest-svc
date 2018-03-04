@@ -1,7 +1,6 @@
 create table customer
 (
-	customer_id int auto_increment
-		primary key,
+	customer_id int auto_increment primary key,
 	customer_name varchar(255) not null,
 	constraint customer_customer_name_uindex
 		unique (customer_name)
@@ -16,8 +15,7 @@ create table hibernate_sequence
 
 create table shirt_inventory
 (
-	shirt_inventory int auto_increment
-		primary key,
+	shirt_inventory int auto_increment primary key,
 	shirt_ref_id int not null,
 	quanity int default '0' not null,
 	constraint shirt_inventory_shirt_ref_id_uindex
@@ -27,8 +25,7 @@ create table shirt_inventory
 
 create table shirt_order
 (
-	shirt_order_id int auto_increment
-		primary key,
+	shirt_order_id int auto_increment primary key,
 	customer_id int null,
 	shirt_ref_id int not null,
 	constraint shirt_order_customer_customer_id_fk
@@ -46,13 +43,12 @@ create index shirt_order_shirt_ref_shirt_ref_id_fk
 
 create table shirt_ref
 (
-	shirt_ref_id int auto_increment
-		primary key,
-	shirt_ref_name varchar(255) not null,
+	shirt_ref_id int auto_increment primary key,
+	shirt_name varchar(255) not null,
 	size varchar(15) null,
 	style varchar(50) null,
 	constraint shirt_ref_shirt_ref_name_uindex
-		unique (shirt_ref_name)
+		unique (shirt_name)
 )
 ;
 

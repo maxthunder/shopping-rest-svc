@@ -9,7 +9,8 @@ public interface ICustomerDAO {
 	List<Customer> getAllCustomers();
 	Customer getCustomerById(Integer customerId);
 	Customer getCustomerByName(String customerName);
-	Customer getCustomerByIdAndName(Customer customer);
-	Customer saveOrUpdateCustomer(Customer customer);
+	Customer getCustomerByIdAndName(Integer customerId, String customerName);
+	Customer saveOrUpdateCustomer(String customerName);
+	Customer saveOrUpdateCustomer(Integer customerId, String customerName);
 
 }

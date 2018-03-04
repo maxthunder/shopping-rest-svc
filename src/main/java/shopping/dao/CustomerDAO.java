@@ -1,6 +1,7 @@
 package shopping.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.stereotype.Repository;
 import shopping.util.ResourceNotFoundException;
 import shopping.model.Customer;
@@ -29,8 +30,13 @@ public class CustomerDAO implements ICustomerDAO {
 	@SuppressWarnings("unchecked")
 	public List<Customer> getAllCustomers() {
 		List<Customer> customers = new ArrayList<>();
-		for (Object[] objects : (List<Object[]>) baseDAO.getListFromNativeQuery(GET_CUSTOMER_QUERY)) {
-			customers.add(new Customer((Integer) objects[0], (String) objects[1]));
+		List<Object[]> result = (List<Object[]>) baseDAO.getListFromNativeQuery(GET_CUSTOMER_QUERY);
+		if (result != null && !result.isEmpty()) {
+			for (Object[] objects : result) {
+				customers.add(new Customer((Integer) objects[0], (String) objects[1]));
+			}
+		} else {
+			throw new ResourceNotFoundException("No customers were returned from database within persistence layer.");
 		}
 
 		return customers;
@@ -64,12 +70,12 @@ public class CustomerDAO implements ICustomerDAO {
 	}
 
 	@Override
-	public Customer getCustomerByIdAndName(Customer customer) {
+	public Customer getCustomerByIdAndName(Integer customerId, String customerName) {
 		String query = GET_CUSTOMER_QUERY + "WHERE customer_id = :customerId AND customer_name = :customerName\n";
 
 		Map<String, Object> queryParameters = new HashMap<>();
-		queryParameters.put("customerId", customer.getCustomerId());
-		queryParameters.put("customerName", customer.getCustomerName());
+		queryParameters.put("customerId", customerId);
+		queryParameters.put("customerName", customerName);
 
 		Object[] results = baseDAO.getObjectArrayFromNativeQuery(query, queryParameters);
 
@@ -77,17 +83,20 @@ public class CustomerDAO implements ICustomerDAO {
 	}
 
 	@Override
-	public Customer saveOrUpdateCustomer(Customer customerToPersist) {
-		Customer customer = new Customer();
+	public Customer saveOrUpdateCustomer(String customerName) {
+		return saveOrUpdateCustomer(null, customerName);
+	}
 
-		if (customerToPersist.getCustomerId() == null) {// new
-			customer.setCustomerId((Integer) baseDAO.getCurrentSession().save(customerToPersist));
-			customer.setCustomerName(customerToPersist.getCustomerName());
+	@Override
+	public Customer saveOrUpdateCustomer(Integer customerId, String customerName) {
+		Customer customer = new Customer(customerId, customerName);
 
+		if (customerId == null) {// new
+			customer.setCustomerId((Integer) baseDAO.save(customer));
 		} else {// existing
-			baseDAO.getCurrentSession().saveOrUpdate(customerToPersist);
-			customer = customerToPersist;
+			baseDAO.saveOrUpdate(customer);
 		}
+
 		return customer;
 	}
 

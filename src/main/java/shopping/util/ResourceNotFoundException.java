@@ -17,4 +17,8 @@ public class ResourceNotFoundException extends RuntimeException {
 	public ResourceNotFoundException(String resource, Object identifier) {
 		super(resource + " <"+identifier.toString()+"> not found in database.");
 	}
+
+	public  ResourceNotFoundException(String resource) {
+		super(resource);
+	}
 }

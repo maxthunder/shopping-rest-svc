@@ -31,7 +31,7 @@ public class Application {
 	@Value("${spring.data.rest.base-path}")
 	private String basePath;
 
-	@Value("${default.page.address}")
+	@Value("${default.welcome.page.address}")
 	private String defaultPage;
 
 	public static void main(String[] args) {

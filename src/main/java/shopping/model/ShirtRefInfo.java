@@ -11,7 +11,7 @@ public class ShirtRefInfo {
 
 	@JsonProperty(required = true)
 	@ApiModelProperty(notes = "Name of shirt ref", required = true)
-	private String shirtRefName;
+	private String shirtName;
 
 	@JsonProperty(required = true)
 	@ApiModelProperty(notes = "Size of shirt ref", required = true)
@@ -21,9 +21,9 @@ public class ShirtRefInfo {
 	@ApiModelProperty(notes = "Style of shirt ref", required = true)
 	private String style;
 
-	public ShirtRefInfo(Integer shirtRefId, String shirtRefName, String size, String style) {
+	public ShirtRefInfo(Integer shirtRefId, String shirtName, String size, String style) {
 		this.shirtRefId = shirtRefId;
-		this.shirtRefName = shirtRefName;
+		this.shirtName = shirtName;
 		this.size = size;
 		this.style = style;
 	}
@@ -35,11 +35,11 @@ public class ShirtRefInfo {
 		this.shirtRefId = shirtRefId;
 	}
 
-	public String getShirtRefName() {
-		return shirtRefName;
+	public String getShirtName() {
+		return shirtName;
 	}
-	public void setShirtRefName(String shirtRefName) {
-		this.shirtRefName = shirtRefName;
+	public void setShirtName(String shirtName) {
+		this.shirtName = shirtName;
 	}
 
 	public String getSize() {
@@ -60,7 +60,7 @@ public class ShirtRefInfo {
 	public String toString() {
 		return "ShirtRefInfo{" +
 				"shirtRefId=" + shirtRefId +
-				", shirtRefName='" + shirtRefName + '\'' +
+				", shirtName='" + shirtName + '\'' +
 				", size='" + size + '\'' +
 				", style='" + style + '\'' +
 				'}';

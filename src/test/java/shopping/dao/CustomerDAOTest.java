@@ -1,11 +1,14 @@
 package shopping.dao;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import shopping.model.Customer;
 
 import javax.transaction.Transactional;
@@ -32,6 +35,7 @@ public class CustomerDAOTest {
 	}
 
 	@Test
+	@Ignore
 	public void getAllCustomers() throws Exception {
 		assertThat(customerDAO.getAllCustomers(), is(not(nullValue())));
 	}

@@ -20,7 +20,7 @@ import shopping.util.ErrorCallback;
 import java.util.List;
 
 @RestController
-@RequestMapping({"${spring.data.rest.base-path}/customers"})
+@RequestMapping({"/shopping/customers"})
 public class CustomerController extends ControllerBase {
 
 	private final CustomerService customerService;

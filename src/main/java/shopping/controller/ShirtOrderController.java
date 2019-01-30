@@ -19,7 +19,7 @@ import shopping.service.ShirtOrderService;
 import java.util.List;
 
 @RestController
-@RequestMapping({"${spring.data.rest.base-path}/shirtOrders"})
+@RequestMapping({"shopping/shirtOrders"})
 public class ShirtOrderController extends ControllerBase {
 
 	private final ShirtOrderService shirtOrderService;

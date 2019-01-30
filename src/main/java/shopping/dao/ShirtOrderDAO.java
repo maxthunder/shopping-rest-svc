@@ -19,7 +19,7 @@ import java.util.Map;
 public class ShirtOrderDAO implements IShirtOrderDAO {
 
 	private final String GET_SHIRT_ORDER_QUERY =
-					"SELECT shirt_order_id, so.customer_id, customer_name, so.shirt_ref_id, shirt_ref_name, size, style\n" +
+					"SELECT shirt_order_id, so.customer_id, customer_name, so.shirt_ref_id, shirt_name, size, style\n" +
 					"FROM shopping.shirt_order so\n" +
 					"JOIN shopping.customer USING(customer_id)\n" +
 					"JOIN shopping.shirt_ref USING(shirt_ref_id)\n";

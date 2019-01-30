@@ -3,6 +3,7 @@ package shopping.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
+// used with ShirtOrders
 public class ShirtRefInfo {
 
 	@JsonProperty(required = true)

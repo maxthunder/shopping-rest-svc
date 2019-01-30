@@ -13,8 +13,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.event.EventListener;
+import shopping.util.SwaggerStatus;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -25,14 +25,31 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-@ComponentScan({"shopping"})
 public class Application {
+
+	private enum SwaggerStatus {
+		AUTO_LAUNCH_SWAGGER("Auto Launch Swagger", true),
+		QUIET_MODE("Quiet Mode", false);
+
+		String name;
+		boolean autoLaunchSwagger;
+
+		SwaggerStatus(String name, boolean autoLaunchSwagger) {
+			this.name = name;
+			this.autoLaunchSwagger = autoLaunchSwagger;
+		}
+	}
+
+	@Value("${auto.launch.swagger}")
+	private String shouldAutoLaunchSwagger;
 
 	@Value("${spring.data.rest.base-path}")
 	private String basePath;
 
 	@Value("${default.welcome.page.address}")
 	private String defaultPage;
+
+	private static SwaggerStatus swaggerStatus;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -43,6 +60,7 @@ public class Application {
 		List<String> paths = new ArrayList<>();
 		paths.add(this.basePath + "/shirtOrders.*");
 		paths.add(this.basePath + "/customers.*");
+		paths.add(this.basePath + "/shirts.*");
 
 		return (new Docket(DocumentationType.SWAGGER_2))
 				.groupName("shopping")
@@ -68,9 +86,15 @@ public class Application {
 	*/
 
 	@EventListener({ApplicationReadyEvent.class})
-	void applicationReadyEvent() {
-		System.out.println("Application started ... launching browser now");
-		Browse(defaultPage);
+	public void applicationReadyEvent() {
+		determineStatus(shouldAutoLaunchSwagger);
+		if (swaggerStatus.equals(SwaggerStatus.AUTO_LAUNCH_SWAGGER)) {
+			System.out.println("Application started ... launching browser now");
+			Browse(defaultPage);
+		} else {
+			System.out.println("Application started ... browser not launched due to " + SwaggerStatus.QUIET_MODE);
+		}
+
 	}
 
 	private static void Browse(String url) {
@@ -88,6 +112,14 @@ public class Application {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void determineStatus(String shouldAutoLaunchSwagger) {
+		if (Boolean.valueOf(shouldAutoLaunchSwagger).equals(true)) {
+			swaggerStatus = SwaggerStatus.AUTO_LAUNCH_SWAGGER;
+		} else {
+			swaggerStatus = SwaggerStatus.QUIET_MODE;
 		}
 	}
 }

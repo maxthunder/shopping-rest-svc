@@ -1,6 +1,5 @@
 package shopping.service;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,9 +31,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerServiceTest {
-
-
-
 	@Rule public ExpectedException expectedException = ExpectedException.none();
 
 	@Mock private IBaseDAO baseDAO;
@@ -129,9 +125,6 @@ public class CustomerServiceTest {
 		expectedException.expectMessage("Customer at name <"+customerName+"> already exists in database.");
 		customerService.updateCustomer(input.getCustomerId(), customerName);
 	}
-
-	// 		expectedException.expectMessage();
-
 
 	@Test
 	public void deleteCustomer() throws Exception {

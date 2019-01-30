@@ -60,7 +60,7 @@ public class ShirtOrderControllerTest {
 		Mockito.when(this.shirtOrderService.getShirtOrderById(anyInt()))
 				.thenReturn(getShirtOrder(1));
 
-		this.mockMvc.perform(get("/shopping/shirtOrders"))
+		this.mockMvc.perform(get("/shopping/shirtOrders/1"))
 				.andDo(print())
 				.andExpect(status().isOk());
 	}

@@ -63,7 +63,7 @@ public class ShirtOrderController extends ControllerBase {
 	public ShirtOrder getShirtOrder(
 			@ApiParam(name = "id",value = "ID of shirt order",required = true) @PathVariable("id") Integer id) {
 
-		return shirtOrderService.getShirtOrder(id);
+		return shirtOrderService.getShirtOrderById(id);
 	}
 
 	/**

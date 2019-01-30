@@ -30,7 +30,7 @@ public class ShirtOrderService {
 		return shirtOrderDAO.getAllShirtOrders();
 	}
 
-	public ShirtOrder getShirtOrder(Integer shirtOrderId) {
+	public ShirtOrder getShirtOrderById(Integer shirtOrderId) {
 		ShirtOrder shirtOrder = shirtOrderDAO.getShirtOrderById(shirtOrderId);
 		if (shirtOrder == null) {
 			throw new ResourceNotFoundException("ShirtOrder at ID", shirtOrderId);

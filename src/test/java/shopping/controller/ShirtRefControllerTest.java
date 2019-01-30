@@ -39,8 +39,6 @@ public class ShirtRefControllerTest {
 	@InjectMocks
 	private ShirtRefController shirtRefController;
 
-	public ShirtRefControllerTest() {}
-
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);

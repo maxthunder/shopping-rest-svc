@@ -8,6 +8,7 @@ import shopping.repos.ShirtRefRepository;
 import shopping.util.BadRequestException;
 import shopping.util.ResourceNotFoundException;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -22,16 +23,19 @@ public class ShirtRefService {
 		this.shirtRefRepository = shirtRefRepository;
 	}
 
+	private final Comparator<ShirtRef> SHIRT_REF_COMPARATOR = Comparator
+			.comparing(ShirtRef::getShirtRefId)
+			.thenComparing(ShirtRef::getShirtName)
+			.thenComparing(ShirtRef::getShirtSize)
+			.thenComparing(ShirtRef::getShirtStyle);
+
 	public List<ShirtRef> getAllShirtRefs() {
 		return shirtRefRepository.findAll();
 	}
 
 	public ShirtRef getShirtRefById(Integer shirtRefId) {
-		ShirtRef shirtRef = shirtRefRepository.findByShirtRefId(shirtRefId);
-		if (shirtRef == null) {
-			throw new ResourceNotFoundException("Shirt Ref at ID", shirtRefId);
-		}
-		return shirtRef;
+		return shirtRefRepository.findByShirtRefId(shirtRefId)
+				.orElseThrow(() -> new ResourceNotFoundException("Shirt Ref at ID", shirtRefId));
 	}
 
 	public ShirtRef saveShirtRef(ShirtRef shirtRef) {
@@ -39,30 +43,32 @@ public class ShirtRefService {
 	}
 
 	public ShirtRef updateShirtRef(ShirtRef shirtRef) {
-		ShirtRef existingShirtRef = shirtRefRepository.findByShirtRefId(shirtRef.getShirtRefId());
-		if (existingShirtRef == null) {
-			throw new ResourceNotFoundException("Shirt Ref at ID", shirtRef.getShirtRefId());
-		}
+		ShirtRef existingShirtRef = shirtRefRepository.findByShirtRefId(shirtRef.getShirtRefId())
+				.orElseThrow(() -> new ResourceNotFoundException("Shirt Ref at ID", shirtRef.getShirtRefId()));
 
-		if (shirtRefRepository.findByShirtName(shirtRef.getShirtName()) != null
-				&& !existingShirtRef.getShirtName().equals(shirtRef.getShirtName())) {
-
-			throw new BadRequestException("There is a different Shirt Ref that already exists with name [" + shirtRef.getShirtName() + "]");
+		if (!existingShirtRef.getShirtName().equals(shirtRef.getShirtName()) &&
+				shirtRefRepository.findByShirtName(shirtRef.getShirtName()).isPresent()) {
+			throw new BadRequestException("There is a different Shirt Ref that already exists with name " +
+					"[" + shirtRef.getShirtName() + "]");
 		}
 
 		return shirtRefRepository.save(shirtRef);
 	}
 
-	// REVIEW: Add shirtRefStatus==DELETABLE to add further protection from accidental shirtRef deletions
 	public ShirtRef deleteShirtRef(Integer shirtRefId, String shirtName) {
-		ShirtRef shirtRef = shirtRefRepository.findByShirtRefId(shirtRefId);
+//		ShirtRef shirtRef = shirtRefRepository.findByShirtRefId(shirtRefId)
+//				.orElseThrow(() -> new ResourceNotFoundException("Shirt Ref at ID", shirtRefId));
+//
+//		ShirtRef shirtRefByName = shirtRefRepository.findByShirtName(shirtName)
+//				.orElseThrow(() -> new ResourceNotFoundException("Shirt Ref at Name", shirtName));
 
-		if (shirtRef == null) {
-			throw new ResourceNotFoundException("Shirt Ref at ID", shirtRefId);
-		}
-		if (shirtRefRepository.findByShirtName(shirtName) != null) {
-			throw new BadRequestException("Shirt Ref already exists at name [" + shirtName + "]");
-		}
+		ShirtRef shirtRef = shirtRefRepository.findByShirtRefIdAndAndShirtName(shirtRefId, shirtName)
+				.orElseThrow(() -> new BadRequestException("Search for shirt ref under " +
+						"ID [" + shirtRefId + "] and name [" + shirtName + "] not found in database."));
+
+//		if (SHIRT_REF_COMPARATOR.compare(shirtRef, shirtRefByName) != 0) {
+//			throw new BadRequestException("ID and name do not match the same shirt ref.");
+//		}
 
 		baseDAO.delete(shirtRef);
 		return shirtRef;

@@ -38,10 +38,6 @@ public class CustomerServiceTest {
 
 	@InjectMocks private CustomerService customerService;
 
-	@Before
-	public void setUp() throws Exception {
-	}
-
 	@Test
 	public void getAllCustomers() throws Exception {
 		List<Customer> customers = Arrays.asList(TestUtils.getCustomer(1), TestUtils.getCustomer(2), TestUtils.getCustomer(3));

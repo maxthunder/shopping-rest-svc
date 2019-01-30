@@ -27,7 +27,7 @@ create table shirt_ref
 
 create table shirt_inventory
 (
-	shirt_inventory int auto_increment
+	shirt_inventory_id int auto_increment
 		primary key,
 	shirt_ref_id int not null,
 	quanity int default 0 not null,
@@ -47,5 +47,15 @@ create table shirt_order
 		foreign key (customer_id) references customer (customer_id),
 	constraint shirt_order_shirt_ref_shirt_ref_id_fk
 		foreign key (shirt_ref_id) references shirt_ref (shirt_ref_id)
+);
+
+create table status_ref
+(
+	status_ref_id int auto_increment
+		primary key,
+	status varchar(25) not null,
+	description varchar(50) null,
+	constraint status_ref_status_uindex
+		unique (status)
 );
 

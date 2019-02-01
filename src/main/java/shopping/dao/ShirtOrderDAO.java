@@ -21,8 +21,8 @@ public class ShirtOrderDAO implements IShirtOrderDAO {
 	private final String GET_SHIRT_ORDER_QUERY =
 					"SELECT shirt_order_id, so.customer_id, customer_name, so.shirt_ref_id, shirt_name, size, style\n" +
 					"FROM shopping.shirt_order so\n" +
-					"JOIN shopping.customer USING(customer_id)\n" +
-					"JOIN shopping.shirt_ref USING(shirt_ref_id)\n";
+					"INNER JOIN shopping.customer USING(customer_id)\n" +
+					"INNER JOIN shopping.shirt_ref USING(shirt_ref_id)\n";
 
 	private final IBaseDAO baseDAO;
 
@@ -35,24 +35,32 @@ public class ShirtOrderDAO implements IShirtOrderDAO {
 	@SuppressWarnings("unchecked")
 	public List<ShirtOrderInfo> getAllShirtOrders() {
 		List<ShirtOrderInfo> shirtOrders = new ArrayList<>();
+		final int ORDER_ID = 0;
+		final int CUSTOMER_ID = 1;
+		final int CUSTOMER_NAME = 2;
+		final int SHIRT_REF_ID = 3;
+		final int SHIRT_REF_NAME = 4;
+		final int SHIRT_REF_SIZE = 5;
+		final int SHIRT_REF_STYLE = 6;
+
 		for (Object[] objects : (List<Object[]>) baseDAO.getListFromNativeQuery(GET_SHIRT_ORDER_QUERY)) {
-			Integer shirtOrderId = (Integer) objects[0];
-			Integer customerId = (Integer) objects[1];
-			String customerName = (String) objects[2];
-			Integer shirtRefId = (Integer) objects[3];
-			String shirtRefName = (String) objects[4];
+			Integer shirtOrderId = (Integer) objects[ORDER_ID];
+			Integer customerId = (Integer) objects[CUSTOMER_ID];
+			String customerName = (String) objects[CUSTOMER_NAME];
+			Integer shirtRefId = (Integer) objects[SHIRT_REF_ID];
+			String shirtRefName = (String) objects[SHIRT_REF_NAME];
 			String size = null;
 			String style = null;
-			if (objects[5] != null) {
-				size = (String) objects[5];
+			if (objects[SHIRT_REF_SIZE] != null) {
+				size = (String) objects[SHIRT_REF_SIZE];
 			}
-			if (objects[6] != null) {
-				style = (String) objects[6];
+			if (objects[SHIRT_REF_STYLE] != null) {
+				style = (String) objects[SHIRT_REF_STYLE];
 			}
 			shirtOrders.add(
 					new ShirtOrderInfo(shirtOrderId,
-							new CustomerInfo(customerId, customerName),
-							new ShirtRefInfo(shirtRefId, shirtRefName, size, style))
+					new CustomerInfo(customerId, customerName),
+					new ShirtRefInfo(shirtRefId, shirtRefName, size, style))
 			);
 		}
 		return shirtOrders;
@@ -86,22 +94,21 @@ public class ShirtOrderDAO implements IShirtOrderDAO {
 		return shirtOrder;
 	}
 
-//	@Override
-//	public ShirtOrder delete(ShirtOrder shirtOrder) {
-//		baseDAO.getCurrentSession().delete(shirtOrder);
-//		return shirtOrder;
-//	}
+	public ShirtOrder delete(ShirtOrder shirtOrder) {
+		baseDAO.getCurrentSession().delete(shirtOrder);
+		return shirtOrder;
+	}
 
 	// objects[]: shirtOrderId, customerId, shirtRefId
 	private ShirtOrder buildShirtOrder(Object[] objects) {
 		ShirtOrder shirtOrder = null;
 
-		// only load if required fields are populated.
 		if (objects != null) {
 			Integer shirtOrderId = (objects[0] == null) ? null : (Integer) objects[0];
 			Integer customerId = (objects[1] == null) ? null : (Integer) objects[1];
 			Integer shirtRefId = (objects[2] == null) ? null : (Integer) objects[2];
 
+			// only load if required fields are populated.
 			if (shirtOrderId != null && customerId != null && shirtRefId != null) {
 				shirtOrder = new ShirtOrder(shirtOrderId, customerId, shirtRefId);
 			}

@@ -55,7 +55,7 @@ public class ShirtOrderService {
 //			throw new BadRequestException("ShirtOrder at name <"+shirtOrderName+"> already exists in database.");
 //		}
 //
-//		// Build ShirtOrder pojo
+//		// Build ShirtOrder model
 //		ShirtOrder shirtOrder = null;
 //		if (loadedShirtOrder == null) {// new - build for save
 //			shirtOrder = new ShirtOrder(shirtOrderId, shirtOrderName);

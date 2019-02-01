@@ -1,18 +1,18 @@
 package shopping.util;
 
 public enum SwaggerStatus {
-    AUTO_LAUNCH_SWAGGER("Auto Launch Swagger", true),
+    AUTO_LAUNCH_SWAGGER("Auto Launch Mode", true),
     QUIET_MODE("Quiet Mode", false);
 
     private String name;
-    private boolean autoLaunchSwagger;
+    private boolean autoLaunch;
 
-    SwaggerStatus(String name, boolean autoLaunchSwagger) {
+    SwaggerStatus(String name, boolean autoLaunch) {
         this.name = name;
-        this.autoLaunchSwagger = autoLaunchSwagger;
+        this.autoLaunch = autoLaunch;
     }
 
     public boolean autoLaunchSwagger() {
-        return this.autoLaunchSwagger;
+        return this.autoLaunch;
     }
 }

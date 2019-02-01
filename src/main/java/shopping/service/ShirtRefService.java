@@ -23,8 +23,8 @@ public class ShirtRefService {
 		this.shirtRefRepository = shirtRefRepository;
 	}
 
-	private final Comparator<ShirtRef> SHIRT_REF_COMPARATOR = Comparator
-			.comparing(ShirtRef::getShirtRefId)
+	private final Comparator<ShirtRef> SHIRT_REF_COMPARATOR =
+			Comparator.comparing(ShirtRef::getShirtRefId)
 			.thenComparing(ShirtRef::getShirtName)
 			.thenComparing(ShirtRef::getShirtSize)
 			.thenComparing(ShirtRef::getShirtStyle);
@@ -56,19 +56,9 @@ public class ShirtRefService {
 	}
 
 	public ShirtRef deleteShirtRef(Integer shirtRefId, String shirtName) {
-//		ShirtRef shirtRef = shirtRefRepository.findByShirtRefId(shirtRefId)
-//				.orElseThrow(() -> new ResourceNotFoundException("Shirt Ref at ID", shirtRefId));
-//
-//		ShirtRef shirtRefByName = shirtRefRepository.findByShirtName(shirtName)
-//				.orElseThrow(() -> new ResourceNotFoundException("Shirt Ref at Name", shirtName));
-
 		ShirtRef shirtRef = shirtRefRepository.findByShirtRefIdAndAndShirtName(shirtRefId, shirtName)
 				.orElseThrow(() -> new BadRequestException("Search for shirt ref under " +
 						"ID [" + shirtRefId + "] and name [" + shirtName + "] not found in database."));
-
-//		if (SHIRT_REF_COMPARATOR.compare(shirtRef, shirtRefByName) != 0) {
-//			throw new BadRequestException("ID and name do not match the same shirt ref.");
-//		}
 
 		baseDAO.delete(shirtRef);
 		return shirtRef;

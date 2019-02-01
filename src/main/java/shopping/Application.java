@@ -44,13 +44,14 @@ public class Application {
 	@Value("${auto.launch.swagger}")
 	private String shouldAutoLaunchSwagger;
 
+	private static SwaggerStatus swaggerStatus;
+
 	@Value("${spring.data.rest.base-path}")
 	private String basePath;
 
 	@Value("${default.welcome.page.address}")
 	private String defaultPage;
 
-	private static SwaggerStatus swaggerStatus;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

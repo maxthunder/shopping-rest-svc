@@ -10,12 +10,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
-import shopping.util.SwaggerStatus;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -26,7 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-public class Application {
+public class ShoppingServiceApplication {
 
 	private enum SwaggerStatus {
 		AUTO_LAUNCH_SWAGGER("Auto Launch Swagger", true),
@@ -54,7 +52,7 @@ public class Application {
 
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(ShoppingServiceApplication.class, args);
 	}
 
 	@Bean
@@ -63,6 +61,8 @@ public class Application {
 		paths.add(this.basePath + "/shirtOrders.*");
 		paths.add(this.basePath + "/customers.*");
 		paths.add(this.basePath + "/shirts.*");
+		paths.add(this.basePath + "/cartOrders.*");
+		paths.add(this.basePath + "/products.*");
 
 		return (new Docket(DocumentationType.SWAGGER_2))
 				.groupName("shopping")

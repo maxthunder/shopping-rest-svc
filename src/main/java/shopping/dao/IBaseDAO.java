@@ -16,4 +16,5 @@ public interface IBaseDAO {
 	Object[] getObjectArrayFromNativeQuery(String queryString, Map<String, Object> queryParameters);
 	List getListFromNativeQuery(String queryString);
 	List getListFromNativeQuery(String queryString, Map<String, Object> queryParameters);
+	void flush();
 }

@@ -5,22 +5,18 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import shopping.model.Customer;
 import shopping.service.CustomerService;
 import shopping.util.ErrorCallback;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping({"/shopping/customers"})
+@CrossOrigin("http://localhost:4200")
 public class CustomerController extends ControllerBase {
 
 	private final CustomerService customerService;
@@ -62,24 +58,41 @@ public class CustomerController extends ControllerBase {
 	public Customer getCustomer(
 			@ApiParam(name = "id",value = "ID of customer",required = true) @PathVariable("id") Integer id) {
 
-		return customerService.getCustomer(id);
+		return customerService.getCustomerById(id);
 	}
 
 	/**
-	 * POST Customer
+	 * GET Customer by NAME
 	 */
 
-	@PostMapping(value = "")
-	@ApiOperation(value = "", notes = "Creates new customer.")
+	@GetMapping(value = "/name/{name}")
+	@ApiOperation(value = "/name/{name}", notes = "Gets customer by customer name.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = Customer.class),
 			@ApiResponse(code = 400, message = "Bad Request"),
 			@ApiResponse(code = 404, message = "Not Found"),
 			@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public Customer createCustomer(// TODO  replace String -> Customer
-			@ApiParam(name = "name",value = "Name of customer",required = true) @RequestParam("name") String name) {
+	public Customer getCustomer(
+			@ApiParam(name = "name",value = "Name of customer",required = true) @PathVariable("name") String name) {
+		return customerService.getCustomerByName(name);
+	}
 
+	/**
+	 * POST Customer
+	 */
+
+	@PostMapping(value = "/name/{name}")
+	@ApiOperation(value = "/name/{name}", notes = "Creates new customer.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = String.class),
+			@ApiResponse(code = 400, message = "Bad Request"),
+			@ApiResponse(code = 404, message = "Not Found"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+	})
+	public Customer createCustomer(// TODO  replace String -> Customer
+			@ApiParam(name = "name",value = "Name of customer",required = true)
+				@PathVariable("name") String name) {
 		return customerService.saveCustomer(name);
 	}
 
@@ -96,8 +109,10 @@ public class CustomerController extends ControllerBase {
 			@ApiResponse(code = 500, message = "Internal Server Error")
 	})
 	public Customer updateCustomer(
-			@ApiParam(name = "id",value = "ID of customer",required = true) @PathVariable("id") Integer id,
-			@ApiParam(name = "name",value = "Name of customer",required = true) @RequestParam("name") String name) {
+			@ApiParam(name = "id",value = "ID of customer",required = true)
+				@PathVariable("id") Integer id,
+			@ApiParam(name = "name",value = "Name of customer",required = true)
+				@RequestParam("name") String name) {
 
 		return customerService.updateCustomer(id, name);
 	}

@@ -2,6 +2,7 @@ package shopping.controller;
 
 import java.util.Arrays;
 
+import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,10 +18,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import shopping.TestUtils;
+import shopping.model.Customer;
 import shopping.service.CustomerService;
 
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -61,7 +62,7 @@ public class CustomerControllerTest {
 
 	@Test
 	public void testGetCustomer() throws Exception {
-		Mockito.when(this.customerService.getCustomer(anyInt()))
+		Mockito.when(this.customerService.getCustomerById(anyInt()))
 				.thenReturn(TestUtils.getCustomer(1));
 
 		this.mockMvc.perform(get("/shopping/customers/1"))
@@ -71,11 +72,15 @@ public class CustomerControllerTest {
 
 	@Test
 	public void testCreateCustomer() throws Exception {
+		Customer customer = TestUtils.getCustomer(1);
 		Mockito.when(this.customerService.saveCustomer(anyString()))
-				.thenReturn(TestUtils.getCustomer(1));
+				.thenReturn(customer);
+
+		Gson gson = new Gson();
 
 		this.mockMvc.perform(post("/shopping/customers")
-				.param("name", "name1"))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(gson.toJson(customer)))
 				.andDo(print())
 				.andExpect(status().isOk());
 	}

@@ -1,9 +1,11 @@
 package shopping.service;
 
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import shopping.dao.IBaseDAO;
+import shopping.repos.CustomerRepository;
 import shopping.util.ResourceNotFoundException;
 import shopping.util.BadRequestException;
 import shopping.dao.ICustomerDAO;
@@ -16,21 +18,33 @@ public class CustomerService {
 
 	private final IBaseDAO baseDAO;
 	private final ICustomerDAO customerDAO;
+	private final CustomerRepository customerRepository;
+
 
 	@Autowired
-	public CustomerService(IBaseDAO baseDAO, ICustomerDAO customerDAO) {
+	public CustomerService(IBaseDAO baseDAO, ICustomerDAO customerDAO,
+						   CustomerRepository customerRepository) {
 		this.baseDAO = baseDAO;
 		this.customerDAO = customerDAO;
+		this.customerRepository = customerRepository;
 	}
 
 	public List<Customer> getAllCustomers() {
 		return customerDAO.getAllCustomers();
 	}
 
-	public Customer getCustomer(Integer customerId) {
+	public Customer getCustomerById(Integer customerId) {
 		Customer customer = customerDAO.getCustomerById(customerId);
 		if (customer == null) {
-			throw new ResourceNotFoundException("Customer at ID", customerId);
+			throw new ResourceNotFoundException("Customer with ID", customerId);
+		}
+		return customer;
+	}
+
+	public Customer getCustomerByName(String customerName) {
+		Customer customer = customerDAO.getCustomerByName(customerName);
+		if (customer == null) {
+			throw new ResourceNotFoundException("Customer with Name", customerName);
 		}
 		return customer;
 	}
@@ -39,14 +53,14 @@ public class CustomerService {
 		if (customerDAO.getCustomerByName(customerName) != null) {
 			throw new BadRequestException("Customer at name <"+customerName+"> already exists in database.");
 		}
-		return customerDAO.saveOrUpdateCustomer(customerName);
+		return customerRepository.save(new Customer(customerName));
 	}
 
 	public Customer updateCustomer(Integer customerId, String customerName) {
 		// Attempt to load by customer ID, null indicates a new entry needed.
 		final Customer loadedCustomer = customerDAO.getCustomerById(customerId);
 		if (loadedCustomer == null) {
-			throw new ResourceNotFoundException("Customer at ID", customerId);
+			throw new ResourceNotFoundException("Customer with ID", customerId);
 		}
 
 		// Make sure customer name is new or already existing with customer ID
@@ -66,7 +80,7 @@ public class CustomerService {
 	public Customer deleteCustomer(Integer customerId, String customerName) {
 		Customer customer = customerDAO.getCustomerByIdAndName(customerId, customerName);
 		if (customer == null) {
-			throw new ResourceNotFoundException("Customer at <ID, Name> :", customerId+","+customerName);
+			throw new ResourceNotFoundException("Customer with <ID, Name> :", customerId+","+customerName);
 		}
 		baseDAO.delete(customer);
 		return customer;

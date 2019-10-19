@@ -5,3 +5,35 @@ Review - impl ShirtOrderService tests
 Review - impl CustomerService tests
 Review - add logging
 Review - add Shirt Table with FK to shirt orders
+
+            1a( The sequence in which an phoneorder gets saved
+                -probably needs to be save phoneorder, then save products)
+
+            1b( This could also be handled by UI, with separate endpoints
+            1c( separate endpoints by be nice for api either way 
+             
+            I UTIMATELY BELIEVE THE BEST ROUTE IS SEPARTE ENDPOINTS: 
+               1) /CartOrders
+                   - takes:(CartOrderJSON)
+                   - returns:(CartOrderId:Integer)
+                   - start new phone cart order by saving a new order and return id
+               2a) /phoneItems  
+                   - takes:(products:List<PhoneItemMapRef>, CartOrderId:Integer)
+                   - returns:(referenceNumber:String)  
+                   - save all phone product maps and returns reference number
+                   - BENEFIT: could be multithreaded through REST svc down the road
+               2b) /phoneItem  
+                   - takes:(product:PhoneItemMapRef)
+                   - returns:(phoneitemId:PhoneItemMapRef)  
+                   - save phone product and returns phone product
+                   - CAVEAT: then multiple threading mut happen on angular (gross)
+
+               3) downside to having itemNames in /CartOrders ? - product resources are coupled with cart order
+               3) benefits?c- single call (more performant, less dev, less complex input since orderid would be contained), less
+
+(phoneitem= (cartOrderId,[phoneItems]))
+
+--------------------ANGULAR--------------------|--------------------JAVA--------------------|
+    customer@name exists?                           GET /customers : POST /customers
+    create order                                    POST /CartOrders
+    add phone products using orderId,products             POST /phoneItems

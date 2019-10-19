@@ -52,7 +52,7 @@ public class CustomerServiceTest {
 		Integer customerId = 1;
 		Customer expected = TestUtils.getCustomer(customerId);
 		when(customerDAO.getCustomerById(customerId)).thenReturn(expected);
-		assertCustomerFields(expected, customerService.getCustomer(customerId));
+		assertCustomerFields(expected, customerService.getCustomerById(customerId));
 		verify(customerDAO).getCustomerById(anyInt());
 
 
@@ -64,7 +64,7 @@ public class CustomerServiceTest {
 		when(customerDAO.getCustomerById(customerId)).thenReturn(null);
 		expectedException.expect(ResourceNotFoundException.class);
 		expectedException.expectMessage("Customer at ID <"+customerId+"> not found in database.");
-		customerService.getCustomer(customerId);
+		customerService.getCustomerById(customerId);
 	}
 
 	@Test
@@ -73,17 +73,18 @@ public class CustomerServiceTest {
 		Customer expected = TestUtils.getCustomer(1);
 		when(customerDAO.getCustomerByName(customerName)).thenReturn(null);
 		when(customerDAO.saveOrUpdateCustomer(customerName)).thenReturn(expected);
-		assertCustomerFields(expected, customerService.saveCustomer(customerName));
+		assertCustomerFields(expected, customerService.saveCustomer(expected.getCustomerName()));
 		verify(customerDAO).getCustomerByName(anyString());
 	}
 
 	@Test
 	public void saveCustomer_CustomerNameAlreadyExists() throws Exception {
 		String customerName = "customer1";
+		Customer customer = new Customer(null, customerName);
 		when(customerDAO.getCustomerByName(customerName)).thenReturn(new Customer());
 		expectedException.expect(BadRequestException.class);
 		expectedException.expectMessage("Customer at name <"+customerName+"> already exists in database.");
-		customerService.saveCustomer(customerName);
+		customerService.saveCustomer(customer.getCustomerName());
 	}
 
 	@Test

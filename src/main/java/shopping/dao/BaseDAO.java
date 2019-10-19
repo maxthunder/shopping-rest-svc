@@ -58,6 +58,11 @@ public class BaseDAO extends AbstractBaseDAO implements IBaseDAO {
 		return query.list();
 	}
 
+	@Override
+	public void flush() {
+		getCurrentSession().flush();
+	}
+
 	private Query addQueryParameters(Query query, Map<String, Object> queryParameters) {
 		if (queryParameters != null && !queryParameters.isEmpty()) {
 			queryParameters.forEach((key, value) -> {

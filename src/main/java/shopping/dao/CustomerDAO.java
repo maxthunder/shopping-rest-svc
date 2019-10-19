@@ -1,12 +1,12 @@
 package shopping.dao;
 
+import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.stereotype.Repository;
 import shopping.util.ResourceNotFoundException;
 import shopping.model.Customer;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,9 +62,6 @@ public class CustomerDAO implements ICustomerDAO {
 		queryParameters.put("customerName", customerName);
 
 		Object[] results = baseDAO.getObjectArrayFromNativeQuery(query, queryParameters);
-		if (results == null) {
-			throw new ResourceNotFoundException("Customer at name", customerName);
-		}
 
 		return buildCustomer(results);
 	}
@@ -91,11 +88,13 @@ public class CustomerDAO implements ICustomerDAO {
 	public Customer saveOrUpdateCustomer(Integer customerId, String customerName) {
 		Customer customer = new Customer(customerId, customerName);
 
-		if (customerId == null) {// new
-			customer.setCustomerId((Integer) baseDAO.save(customer));
-		} else {// existing
+//		if (customerId == null) {// new
+//			Integer id = (Integer) baseDAO.save(customer);
+//			customer.setCustomerId(id);
+//		} else {// existing
 			baseDAO.saveOrUpdate(customer);
-		}
+//		}
+
 
 		return customer;
 	}

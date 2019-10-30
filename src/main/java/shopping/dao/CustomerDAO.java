@@ -30,7 +30,7 @@ public class CustomerDAO implements ICustomerDAO {
 	@SuppressWarnings("unchecked")
 	public List<Customer> getAllCustomers() {
 		List<Customer> customers = new ArrayList<>();
-		List<Object[]> result = (List<Object[]>) baseDAO.getListFromNativeQuery(GET_CUSTOMER_QUERY);
+		List<Object[]> result = (List<Object[]>) baseDAO.getListFromNativeQuery(GET_CUSTOMER_QUERY + " ORDER BY customer_name");
 		if (result != null && !result.isEmpty()) {
 			for (Object[] objects : result) {
 				customers.add(new Customer((Integer) objects[0], (String) objects[1]));

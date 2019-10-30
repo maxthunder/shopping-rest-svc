@@ -56,13 +56,14 @@ public class ShoppingServiceApplication {
 	}
 
 	@Bean
-	public Docket shirtOrdersApi() {
+	public Docket shoppingApi() {
 		List<String> paths = new ArrayList<>();
 		paths.add(this.basePath + "/shirtOrders.*");
 		paths.add(this.basePath + "/customers.*");
 		paths.add(this.basePath + "/shirts.*");
 		paths.add(this.basePath + "/cartOrders.*");
 		paths.add(this.basePath + "/products.*");
+		paths.add(this.basePath + "/status.*");
 
 		return (new Docket(DocumentationType.SWAGGER_2))
 				.groupName("shopping")

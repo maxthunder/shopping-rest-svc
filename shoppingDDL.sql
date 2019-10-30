@@ -55,16 +55,16 @@ create table status_ref (
 		unique (status)
 );
 
-create table phone_cart_order(
-	phone_cart_order_id int auto_increment primary key,
+create table cart_order(
+	cart_order_id int auto_increment primary key,
 	address varchar(75) not null,
 	customer_id int not null,
-	constraint phone_cart_order_customer_customer_id_fk
+	constraint cart_order_customer_customer_id_fk
 		foreign key (customer_id) references customer (customer_id)
 );
 
-create table phone_ref(
-	phone_ref_id int auto_increment primary key,
+create table product_ref(
+	product_ref_id int auto_increment primary key,
 	name varchar(25) not null,
 	price float(8,2) not null,
 	description varchar(50) null
@@ -72,10 +72,10 @@ create table phone_ref(
 
 create table phone_item_map_ref(
 	phone_item_map_ref_id int auto_increment primary key,
-	phone_cart_order_id int not null,
-	phone_ref_id int not null,
+	cart_order_id int not null,
+	product_ref_id int not null,
 	constraint phone_item_map_ref_phone_ref_phone_ref_id_fk
-		foreign key (phone_ref_id) references phone_ref (phone_ref_id),
-	constraint phone_item_map_ref_phone_cart_order_card_order_id_fk
-		foreign key (phone_cart_order_id) references phone_cart_order (phone_cart_order_id)
+		foreign key (product_ref_id) references product_ref (product_ref_id),
+	constraint phone_item_map_ref_cart_order_card_order_id_fk
+		foreign key (cart_order_id) references cart_order (cart_order_id)
 );

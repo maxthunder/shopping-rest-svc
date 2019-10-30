@@ -8,7 +8,7 @@ import java.util.List;
 @ApiModel("CartOrderInfo")
 @Data
 public class CartOrderInfo {
-    private Integer customerId;
     private String address;
+    private Integer customerId;
     private List<Integer> productIds;
 }

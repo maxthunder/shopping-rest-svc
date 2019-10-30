@@ -17,7 +17,7 @@ Review - add Shirt Table with FK to shirt orders
                    - takes:(CartOrderJSON)
                    - returns:(CartOrderId:Integer)
                    - start new phone cart order by saving a new order and return id
-               2a) /phoneItems  
+               2a) /phonePurchasedItems
                    - takes:(products:List<PhoneItemMapRef>, CartOrderId:Integer)
                    - returns:(referenceNumber:String)  
                    - save all phone product maps and returns reference number
@@ -31,9 +31,9 @@ Review - add Shirt Table with FK to shirt orders
                3) downside to having itemNames in /CartOrders ? - product resources are coupled with cart order
                3) benefits?c- single call (more performant, less dev, less complex input since orderid would be contained), less
 
-(phoneitem= (cartOrderId,[phoneItems]))
+(phoneitem= (cartOrderId,[phonePurchasedItems]))
 
 --------------------ANGULAR--------------------|--------------------JAVA--------------------|
     customer@name exists?                           GET /customers : POST /customers
     create order                                    POST /CartOrders
-    add phone products using orderId,products             POST /phoneItems
+    add phone products using orderId,products             POST /phonePurchasedItems

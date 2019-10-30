@@ -3,50 +3,50 @@ package shopping.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shopping.dao.ICustomerDAO;
-import shopping.dao.ICartOrderDAO;
-import shopping.dao.IPhoneRefDAO;
-import shopping.model.Customer;
-import shopping.model.CartOrder;
-import shopping.model.CartOrderInfo;
-import shopping.model.PhoneRef;
-import shopping.repos.PhoneRefRepository;
+import shopping.model.*;
+import shopping.repos.CartOrderRepository;
+import shopping.repos.PurchasedItemRepository;
+import shopping.repos.ProductRepository;
 import shopping.util.ResourceNotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartOrderService {
 
-    private final ICartOrderDAO CartOrderDAO;
     private final ICustomerDAO customerDAO;
-    private final IPhoneRefDAO phoneRefDAO;
-//    private final PhoneRefRepository phoneRefRepository;
+    private final CartOrderRepository cartOrderRepository;
+    private final ProductRepository productRepository;
+    private final PurchasedItemRepository purchasedItemRepository;
 
     @Autowired
-    public CartOrderService(ICartOrderDAO CartOrderDAO, ICustomerDAO customerDAO,
-                                 IPhoneRefDAO phoneRefDAO) {
-        this.CartOrderDAO = CartOrderDAO;
+    public CartOrderService(ICustomerDAO customerDAO, CartOrderRepository cartOrderRepository,
+                            ProductRepository productRepository, PurchasedItemRepository purchasedItemRepository) {
         this.customerDAO = customerDAO;
-        this.phoneRefDAO = phoneRefDAO;
+        this.cartOrderRepository = cartOrderRepository;
+        this.productRepository = productRepository;
+        this.purchasedItemRepository = purchasedItemRepository;
     }
 
-    public CartOrder saveCartOrder(CartOrderInfo input) {
-        return CartOrderDAO.saveCartOrder(mapInputToModel(input));
+    public CartOrderExport saveCartOrder(CartOrderInfo pojo) {
+        if (customerDAO.getCustomerById(pojo.getCustomerId()) == null)
+            throw new ResourceNotFoundException("Customer with ID", pojo.getCustomerId());
+
+        CartOrder model = new CartOrder(pojo.getAddress(), pojo.getCustomerId());
+        CartOrder cartOrder = cartOrderRepository.saveAndFlush(model);
+
+        List<PurchasedItem> purchasedItems = new ArrayList<>();
+        pojo.getProductIds().forEach(id -> {
+            Optional<ProductRef> opt = productRepository.findByProductRefId(id);
+            if (!opt.isPresent())
+                throw new ResourceNotFoundException("Phone with ID", id);
+            PurchasedItem map = new PurchasedItem(cartOrder.getCartOrderId(), opt.get().getProductRefId());
+            purchasedItems.add(purchasedItemRepository.saveAndFlush(map));
+        });
+
+        return new CartOrderExport(cartOrder, purchasedItems);
     }
 
-    private CartOrder mapInputToModel(CartOrderInfo input) {
-        CartOrder model = new CartOrder();
-
-        Customer customer = customerDAO.getCustomerById(input.getCustomerId());
-        if (customer == null)
-            throw new ResourceNotFoundException("Customer with ID", input.getCustomerId());
-        model.setCustomerId(customer.getCustomerId());
-
-//        input.getProductIds().forEach(id -> {
-//            PhoneRef phoneRef = phoneRefDAO.getPhoneRefByName(null);
-//            if (phoneRef == null)
-//                throw new ResourceNotFoundException("Phone with Name", null);
-//        });
-
-        model.setAddress(input.getAddress());
-        return model;
-    }
 }

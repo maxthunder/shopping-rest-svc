@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import shopping.model.CartOrder;
+import shopping.model.CartOrderExport;
 import shopping.model.CartOrderInfo;
 import shopping.service.CartOrderService;
 
@@ -14,30 +14,31 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping({"/shopping/cartOrders"})
+@CrossOrigin("http://localhost:4200")
 public class CartOrderController extends ControllerBase {
 
-	private final CartOrderService CartOrderService;
+	private final CartOrderService cartOrderService;
 
 	@Autowired
 	public CartOrderController(CartOrderService CartOrderService) {
-		this.CartOrderService = CartOrderService;
+		this.cartOrderService = CartOrderService;
 	}
 
 	/**
-	 * POST Phone Cart Order
+	 * POST Cart Order
 	 */
 	@PostMapping(value = "")
-	@ApiOperation(value = "", notes = "Creates new phone cart order.")
+	@ApiOperation(value = "", notes = "Creates new cart order.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = CartOrderInfo.class),
 			@ApiResponse(code = 400, message = "Bad Request"),
 			@ApiResponse(code = 404, message = "Not Found"),
 			@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public CartOrder createCartOrder(
-			@ApiParam(value = "phone cart order data json", required = true)
-				@Valid @RequestBody CartOrderInfo input) {
-		return CartOrderService.saveCartOrder(input);
+	public CartOrderExport createCartOrder(
+			@ApiParam(value = "pojo of cart order", required = true)
+				@Valid @RequestBody CartOrderInfo pojo) {
+		return cartOrderService.saveCartOrder(pojo);
 	}
 
 }

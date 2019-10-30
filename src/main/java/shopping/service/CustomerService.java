@@ -13,6 +13,8 @@ import shopping.model.Customer;
 
 import java.util.List;
 
+import static java.util.Comparator.comparing;
+
 @Service
 public class CustomerService {
 
@@ -53,7 +55,7 @@ public class CustomerService {
 		if (customerDAO.getCustomerByName(customerName) != null) {
 			throw new BadRequestException("Customer at name <"+customerName+"> already exists in database.");
 		}
-		return customerRepository.save(new Customer(customerName));
+		return customerRepository.saveAndFlush(new Customer(customerName));
 	}
 
 	public Customer updateCustomer(Integer customerId, String customerName) {

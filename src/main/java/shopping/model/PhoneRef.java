@@ -14,7 +14,6 @@ public class PhoneRef implements Serializable {
     private String name;
     private Double price;
     private String description;
-    private Integer CartOrderId;
 
     public PhoneRef(String name) {
         this.name = name;

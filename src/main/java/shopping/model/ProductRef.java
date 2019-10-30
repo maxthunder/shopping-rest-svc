@@ -10,15 +10,15 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "product")
+@Table(name = "product_ref")
 @JsonIgnoreProperties
 @CrossOrigin
-public class Product implements Serializable {
+public class ProductRef implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name =  "product_id")
-	private Integer productId;
+	@Column(name =  "product_ref_id")
+	private Integer productRefId;
 
 	@JsonProperty(required = true)
 	@ApiModelProperty(notes = "Name of the product", required = true)
@@ -38,20 +38,20 @@ public class Product implements Serializable {
 	@NotNull
 	private String description;
 
-	public Product(String name, Double price, String description) {
+	public ProductRef(String name, Double price, String description) {
 		this.name = name;
 		this.price = price;
 		this.description = description;
 	}
 
-	public Product() {}
+	public ProductRef() {}
 
-	public Integer getProductId() {
-		return productId;
+	public Integer getProductRefId() {
+		return productRefId;
 	}
 
-	public void setProductId(Integer productId) {
-		this.productId = productId;
+	public void setProductRefId(Integer productRefId) {
+		this.productRefId = productRefId;
 	}
 
 	public String getName() {

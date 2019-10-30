@@ -1,3 +1,4 @@
+import com.google.common.collect.Lists;
 import org.junit.Test;
 
 import java.io.*;
@@ -6,6 +7,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.*;
 
+import static java.util.Comparator.comparing;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -94,5 +96,11 @@ public class TestMaxwell {
 
     private void takesNumbersAndSubtypes(List<? extends Number> numbers) {
         numbers.forEach(System.out::println);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void optionalTests() {
+        Optional<String> opt = Optional.empty();
+        opt.get();
     }
 }

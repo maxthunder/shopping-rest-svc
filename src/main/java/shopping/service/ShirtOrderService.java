@@ -3,9 +3,9 @@ package shopping.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shopping.dao.IBaseDAO;
-import shopping.dao.ICustomerDAO;
 import shopping.dao.IShirtOrderDAO;
 import shopping.model.ShirtOrderInfo;
+import shopping.repos.CustomerRepository;
 import shopping.util.BadRequestException;
 import shopping.model.ShirtOrder;
 import shopping.util.ResourceNotFoundException;
@@ -16,14 +16,14 @@ import java.util.List;
 public class ShirtOrderService {
 
 	private final IBaseDAO baseDAO;
-	private final ICustomerDAO customerDAO;
+	private final CustomerRepository customerRepository;
 	private final IShirtOrderDAO shirtOrderDAO;
 
 	@Autowired
-	public ShirtOrderService(IBaseDAO baseDAO, IShirtOrderDAO shirtOrderDAO, ICustomerDAO customerDAO) {
+	public ShirtOrderService(IBaseDAO baseDAO, IShirtOrderDAO shirtOrderDAO, CustomerRepository customerRepository) {
 		this.baseDAO = baseDAO;
 		this.shirtOrderDAO = shirtOrderDAO;
-		this.customerDAO = customerDAO;
+		this.customerRepository = customerRepository;
 	}
 
 	public List<ShirtOrderInfo> getAllShirtOrders() {
@@ -39,7 +39,7 @@ public class ShirtOrderService {
 	}
 
 	public ShirtOrder saveShirtOrder(Integer customerId, Integer shirtRefId) {
-		if (customerDAO.getCustomerById(customerId) == null) {
+		if (!customerRepository.findByCustomerId(customerId).isPresent()) {
 			throw new BadRequestException("Customer at ID");
 		}
 		// REVIEW: add validation for shirt ref id existence

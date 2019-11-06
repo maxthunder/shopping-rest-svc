@@ -1,0 +1,18 @@
+
+# HEROKU: creating app
+
+$ heroku login
+
+$ heroku create <app-name>
+
+$ cd my-project/
+$ git init
+$ heroku git:remote -a <app-name>
+
+$ git add .
+$ git commit -am "make it better"
+$ git push heroku master
+
+# cloning a repo:
+$ heroku git:clone -a heroku-demo-maxthunder
+$ cd heroku-demo-maxthunder

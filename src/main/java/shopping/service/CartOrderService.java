@@ -2,9 +2,9 @@ package shopping.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import shopping.dao.ICustomerDAO;
 import shopping.model.*;
 import shopping.repos.CartOrderRepository;
+import shopping.repos.CustomerRepository;
 import shopping.repos.PurchasedItemRepository;
 import shopping.repos.ProductRepository;
 import shopping.util.ResourceNotFoundException;
@@ -16,22 +16,22 @@ import java.util.Optional;
 @Service
 public class CartOrderService {
 
-    private final ICustomerDAO customerDAO;
+    private final CustomerRepository customerRepository;
     private final CartOrderRepository cartOrderRepository;
     private final ProductRepository productRepository;
     private final PurchasedItemRepository purchasedItemRepository;
 
     @Autowired
-    public CartOrderService(ICustomerDAO customerDAO, CartOrderRepository cartOrderRepository,
+    public CartOrderService(CustomerRepository customerRepository, CartOrderRepository cartOrderRepository,
                             ProductRepository productRepository, PurchasedItemRepository purchasedItemRepository) {
-        this.customerDAO = customerDAO;
+        this.customerRepository = customerRepository;
         this.cartOrderRepository = cartOrderRepository;
         this.productRepository = productRepository;
         this.purchasedItemRepository = purchasedItemRepository;
     }
 
     public CartOrderExport saveCartOrder(CartOrderInfo pojo) {
-        if (customerDAO.getCustomerById(pojo.getCustomerId()) == null)
+        if (!customerRepository.findByCustomerId(pojo.getCustomerId()).isPresent())
             throw new ResourceNotFoundException("Customer with ID", pojo.getCustomerId());
 
         CartOrder model = new CartOrder(pojo.getAddress(), pojo.getCustomerId());

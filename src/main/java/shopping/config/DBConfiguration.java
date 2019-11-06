@@ -20,13 +20,16 @@ public class DBConfiguration {
 	@Value("${db.driver}")
 	private String DRIVER;
 
-	@Value("${db.password}")
+//	@Value("${db.password}")
+	@Value("${spring.datasource.password}")
 	private String PASSWORD;
 
-	@Value("${db.url}")
+//	@Value("${db.url}")
+	@Value("${spring.datasource.url}")
 	private String URL;
 
-	@Value("${db.username}")
+//	@Value("${db.username}")
+	@Value("${spring.datasource.username}")
 	private String USERNAME;
 
 	@Value("${hibernate.dialect}")

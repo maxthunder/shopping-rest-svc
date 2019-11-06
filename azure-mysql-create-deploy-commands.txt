@@ -1,0 +1,17 @@
+# create database
+az mysql server create --resource-group resource-group-1 --name maxthunder-mysqlserver-1 --location eastus --admin-user maxthunder --admin-password Fox123123! --sku-name GP_Gen5_2 --version 5.7
+
+# configure firewall rule (named AllowMyIP)
+az mysql server firewall-rule create --resource-group resource-group-1 --server maxthunder-mysqlserver-1 --name AllowMyIP --start-ip-address 192.168.0.1 --end-ip-address 192.168.0.1
+
+az mysql server firewall-rule create --resource-group resource-group-1 --server maxthunder-mysqlserver-1 --name AllowMyIP --start-ip-address 76.120.99.68 --end-ip-address 76.120.99.68
+
+# show connection info
+az mysql server show --resource-group resource-group-1 --name maxthunder-mysqlserver-1
+
+# connecting to database
+mysql -h maxthunder-mysqlserver-1.mysql.database.azure.com -u maxthunder@maxthunder-mysqlserver-1 -p
+
+mysql.server start -h maxthunder-mysqlserver-1.mysql.database.azure.com -u maxthunder@maxthunder-mysqlserver-1 -p
+
+az ad sp create-for-rbac --name "shopping" --password "Fox123123!"

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     List<Customer> findAll();
     Optional<Customer> findByCustomerId(Integer id);
     Optional<Customer> findByCustomerName(String shirtName);

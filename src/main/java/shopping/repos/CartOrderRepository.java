@@ -7,6 +7,7 @@ import shopping.model.CartOrder;
 import java.util.List;
 
 @Repository
-public interface CartOrderRepository extends JpaRepository<CartOrder, Long> {
+public interface CartOrderRepository extends JpaRepository<CartOrder, Integer> {
     List<CartOrder> findAll();
+    List<CartOrder> findAllByCustomerId(Integer customerId);
 }

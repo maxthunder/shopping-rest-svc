@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface PurchasedItemRepository extends JpaRepository<PurchasedItem, Long> {
     List<PurchasedItem> findAll();
     Optional<PurchasedItem> findByPurchasedItemId(Integer id);
+    List<PurchasedItem> findAllByCartOrderId(Integer cartOrderId);
 }

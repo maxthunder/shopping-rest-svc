@@ -12,12 +12,12 @@ public class CartOrderExport implements Serializable {
     private Integer cartOrderId;
     private String address;
     private Integer customerId;
-    private List<PurchasedItem> phonePurchasedItems;
+    private List<PurchasedItem> purchasedItems;
 
-    public CartOrderExport(CartOrder cartOrder, List<PurchasedItem> phonePurchasedItems) {
+    public CartOrderExport(CartOrder cartOrder, List<PurchasedItem> purchasedItems) {
         this.cartOrderId = cartOrder.getCartOrderId();
         this.address = cartOrder.getAddress();
         this.customerId = cartOrder.getCustomerId();
-        this.phonePurchasedItems = phonePurchasedItems;
+        this.purchasedItems = purchasedItems;
     }
 }

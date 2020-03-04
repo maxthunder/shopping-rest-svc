@@ -6,10 +6,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
 
 public class TestMaxwell {
 
@@ -103,4 +104,36 @@ public class TestMaxwell {
         Optional<String> opt = Optional.empty();
         opt.get();
     }
+
+    @Test
+    public void arrayDeepDiveTest() {
+        Integer[] array = new Integer[]{3,2,4,1};
+        List<Integer> list = Arrays.asList(array);
+        assertThat(array, is(new Integer[]{3,2,4,1}));
+
+        // underlying array gets sorted when list does because list is using
+        // original array internally.
+        Collections.sort(list);
+        assertThat(array, is(new Integer[]{1,2,3,4}));
+    }
+
+//    static int simpleArraySum(int[] ar) {
+//        List<Integer> list = Arrays.asList(ar);
+//        Integer total = 0;
+//        list.forEach(item -> {
+//            total += item;
+//        });
+//        return total;
+//    }
+
+    @Test
+    public void blahblah() {
+        Object obj = null;
+        String str = (String) obj;
+        System.out.println(str);
+    }
+
+
+
+
 }
